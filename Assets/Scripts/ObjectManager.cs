@@ -7,6 +7,7 @@ public enum PoolType
     enemyL,
     enemyM,
     enemyS,
+    follower,
 
     itemCoin,
     itemPower,
@@ -16,6 +17,7 @@ public enum PoolType
     bulletPlayerB,
     bulletEnemyA,
     bulletEnemyB,
+    bulletFollowerA,
 
     MAX
 };
@@ -27,6 +29,7 @@ public class ObjectManager : MonoBehaviour
     [SerializeField] GameObject base_enemyL;
     [SerializeField] GameObject base_enemyM;
     [SerializeField] GameObject base_enemyS;
+    [SerializeField] GameObject base_follower;
 
     [SerializeField] GameObject base_itemCoin;
     [SerializeField] GameObject base_itemPower;
@@ -36,19 +39,22 @@ public class ObjectManager : MonoBehaviour
     [SerializeField] GameObject base_bulletPlayerB;
     [SerializeField] GameObject base_bulletEnemyA;
     [SerializeField] GameObject base_bulletEnemyB;
+    [SerializeField] GameObject base_bulletFollowerA;
 
-    [SerializeField] List<GameObject> pool_enemyL = new List<GameObject>();
-    [SerializeField] List<GameObject> pool_enemyM = new List<GameObject>();
-    [SerializeField] List<GameObject> pool_enemyS = new List<GameObject>();
+    List<GameObject> pool_enemyL = new List<GameObject>();
+    List<GameObject> pool_enemyM = new List<GameObject>();
+    List<GameObject> pool_enemyS = new List<GameObject>();
+    List<GameObject> pool_follower = new List<GameObject>();
 
-    [SerializeField] List<GameObject> pool_itemCoin = new List<GameObject>();
-    [SerializeField] List<GameObject> pool_itemPower = new List<GameObject>();
-    [SerializeField] List<GameObject> pool_itemBomb = new List<GameObject>();
+    List<GameObject> pool_itemCoin = new List<GameObject>();
+    List<GameObject> pool_itemPower = new List<GameObject>();
+    List<GameObject> pool_itemBomb = new List<GameObject>();
 
-    [SerializeField] List<GameObject> pool_bulletPlayerA = new List<GameObject>();
-    [SerializeField] List<GameObject> pool_bulletPlayerB = new List<GameObject>();
-    [SerializeField] List<GameObject> pool_bulletEnemyA = new List<GameObject>();
-    [SerializeField] List<GameObject> pool_bulletEnemyB = new List<GameObject>();
+    List<GameObject> pool_bulletPlayerA = new List<GameObject>();
+    List<GameObject> pool_bulletPlayerB = new List<GameObject>();
+    List<GameObject> pool_bulletEnemyA = new List<GameObject>();
+    List<GameObject> pool_bulletEnemyB = new List<GameObject>();
+    List<GameObject> pool_bulletFollowerA = new List<GameObject>();
 
     void Awake()
     {
@@ -63,6 +69,7 @@ public class ObjectManager : MonoBehaviour
             pool_enemyL.Add(Instantiate(base_enemyL, this.gameObject.transform));
             pool_enemyM.Add(Instantiate(base_enemyM, this.gameObject.transform));
             pool_enemyS.Add(Instantiate(base_enemyS, this.gameObject.transform));
+            pool_follower.Add(Instantiate(base_follower, this.gameObject.transform));
 
             pool_itemCoin.Add(Instantiate(base_itemCoin, this.gameObject.transform));
             pool_itemPower.Add(Instantiate(base_itemPower, this.gameObject.transform));
@@ -72,6 +79,7 @@ public class ObjectManager : MonoBehaviour
         ObjectAllHide(pool_enemyL);
         ObjectAllHide(pool_enemyM);
         ObjectAllHide(pool_enemyS);
+        ObjectAllHide(pool_follower);
 
         ObjectAllHide(pool_itemCoin);
         ObjectAllHide(pool_itemPower);
@@ -84,6 +92,7 @@ public class ObjectManager : MonoBehaviour
 
             pool_bulletEnemyA.Add(Instantiate(base_bulletEnemyA, this.gameObject.transform));
             pool_bulletEnemyB.Add(Instantiate(base_bulletEnemyB, this.gameObject.transform));
+            pool_bulletFollowerA.Add(Instantiate(base_bulletFollowerA, this.gameObject.transform));
         }
 
         ObjectAllHide(pool_bulletPlayerA);
@@ -91,6 +100,7 @@ public class ObjectManager : MonoBehaviour
 
         ObjectAllHide(pool_bulletEnemyA);
         ObjectAllHide(pool_bulletEnemyB);
+        ObjectAllHide(pool_bulletFollowerA);
     }
     public GameObject MakeObj(PoolType poolType)
     {
@@ -124,7 +134,8 @@ public class ObjectManager : MonoBehaviour
         {
             case PoolType.enemyL:   return pool_enemyL;
             case PoolType.enemyM:   return pool_enemyM;
-            case PoolType.enemyS:   return pool_enemyS;
+            case PoolType.enemyS: return pool_enemyS;
+            case PoolType.follower: return pool_follower;
 
             case PoolType.itemCoin: return pool_itemCoin;
             case PoolType.itemPower: return pool_itemPower;
@@ -134,6 +145,7 @@ public class ObjectManager : MonoBehaviour
             case PoolType.bulletPlayerB: return pool_bulletPlayerB;
             case PoolType.bulletEnemyA: return pool_bulletEnemyA;
             case PoolType.bulletEnemyB: return pool_bulletEnemyB;
+            case PoolType.bulletFollowerA: return pool_bulletFollowerA;
         }
 
         return null;
@@ -146,6 +158,7 @@ public class ObjectManager : MonoBehaviour
             case PoolType.enemyL: return base_enemyL;
             case PoolType.enemyM: return base_enemyM;
             case PoolType.enemyS: return base_enemyS;
+            case PoolType.follower: return base_follower;
 
             case PoolType.itemCoin:     return base_itemCoin;
             case PoolType.itemPower:    return base_itemPower;
@@ -155,6 +168,7 @@ public class ObjectManager : MonoBehaviour
             case PoolType.bulletPlayerB:    return base_bulletPlayerB;
             case PoolType.bulletEnemyA:     return base_bulletEnemyA;
             case PoolType.bulletEnemyB:     return base_bulletEnemyB;
+            case PoolType.bulletFollowerA:  return base_bulletFollowerA;
         }
 
         return null;

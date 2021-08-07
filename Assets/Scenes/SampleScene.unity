@@ -1217,7 +1217,7 @@ MonoBehaviour:
   bulletSpeed: 10
   maxShotDelay: 0.1
   curShotDelay: 0
-  power: 1
+  power: 3
   speed: 5
   autoFire: 1
 --- !u!50 &773957484
@@ -1976,6 +1976,7 @@ MonoBehaviour:
   base_enemyL: {fileID: 1234001317415416098, guid: e419be2a57e565440951c5547ddb6e2c, type: 3}
   base_enemyM: {fileID: 4848985213496081305, guid: c5eaa7e6cefcce04c934ecdfd911d86c, type: 3}
   base_enemyS: {fileID: 8278981264010724858, guid: a21b2dd472f53844f99e064be5740a17, type: 3}
+  base_follower: {fileID: 4558412077262552573, guid: 31274bf73bdfdab4eadbb97ea5506e15, type: 3}
   base_itemCoin: {fileID: 6047480187858481887, guid: 7da807e0fe8ec6a42ba3b5b47fc93d20, type: 3}
   base_itemPower: {fileID: 641965041542366174, guid: 20f8d6bbb9e228846959408699f442c7, type: 3}
   base_itemBomb: {fileID: 8631642375004373866, guid: f5b6d7d99ffea6b4284971e4949ab8a3, type: 3}
@@ -1983,6 +1984,7 @@ MonoBehaviour:
   base_bulletPlayerB: {fileID: 6603623644379204003, guid: 771e9fd6f0921fa4d999064823c2fceb, type: 3}
   base_bulletEnemyA: {fileID: 7570146172267316826, guid: 8bbaee6f322dba44eb75dafdc60c0c22, type: 3}
   base_bulletEnemyB: {fileID: 4591247710470653839, guid: f63cfdd55d738684d94f8894b55febd6, type: 3}
+  base_bulletFollowerA: {fileID: 7020668317147334063, guid: 6ce5d0e250fee304399b36d47efbed69, type: 3}
 --- !u!4 &1124267291
 Transform:
   m_ObjectHideFlags: 0
@@ -4023,8 +4025,6 @@ MonoBehaviour:
   - {fileID: 1160259886}
   - {fileID: 1826274885}
   - {fileID: 1855043003}
-  maxSpawnDelay: 0
-  curSpawnDelay: 0
   player: {fileID: 773957483}
   scoreText: {fileID: 1035546438}
   lifeImage:

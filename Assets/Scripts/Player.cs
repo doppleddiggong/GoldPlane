@@ -52,7 +52,10 @@ public class Player : MonoBehaviour
                     break;
                 case Item.ItemType.Power:
                     if (power != MAX_POWER)
+                    {
                         power++;
+                        AddFollower();
+                    }
                     else
                         GameManager.Inst.score += 500;
                     break;
@@ -112,7 +115,7 @@ public class Player : MonoBehaviour
     [SerializeField] float curShotDelay = 0.0f;
 
     [SerializeField] public uint power;
-    uint MAX_POWER = 3;
+    uint MAX_POWER = 6;
 
     [SerializeField] public float speed = 1.0f;
 
@@ -158,6 +161,7 @@ public class Player : MonoBehaviour
                 break;
 
             case 3:
+            default:
                 {
                     var bulletL = ObjectManager.Inst.MakeObj(PoolType.bulletPlayerA).GetComponent<Rigidbody2D>();
                     bulletL.transform.position = transform.position + Vector3.left * 0.3f;
@@ -195,6 +199,42 @@ public class Player : MonoBehaviour
     void Reload()
     {
         curShotDelay += Time.deltaTime;
+    }
+    #endregion
+
+    #region Follower
+
+    List<Follower> followers = new List<Follower>();
+
+    void AddFollower()
+    {
+        if (power >= 4)
+        {
+            var follower = ObjectManager.Inst.MakeObj(PoolType.follower).GetComponent<Follower>();
+            follower.transform.position = this.gameObject.transform.position;
+            followers.Add(follower);
+
+            if (followers.Count ==  1)
+            {
+                follower.parent = this.gameObject.transform;
+            }
+            else
+            {
+                follower.parent = followers[followers.Count - 2].transform;
+            }
+        }
+    }
+
+    public void FollowerActivate( bool state )
+    {
+        foreach( var follower in followers )
+        {
+            follower.gameObject.SetActive(state);
+            if (state)
+            {
+                follower.transform.position = this.gameObject.transform.position;
+            }
+        }
     }
     #endregion
 }

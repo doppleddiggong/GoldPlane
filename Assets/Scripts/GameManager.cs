@@ -110,6 +110,8 @@ public class GameManager : MonoBehaviour
     public void PlayerHit()
     {
         player.gameObject.SetActive(false);
+        player.FollowerActivate(false);
+
         playerLife -= 1;
         UpdateLifeIcon();
 
@@ -127,7 +129,8 @@ public class GameManager : MonoBehaviour
     {
         player.transform.position = Vector3.down * 3.5f;
         player.gameObject.SetActive(true);
-    }
+        player.FollowerActivate(true);
+        }
 
     void UpdateLifeIcon()
     {
