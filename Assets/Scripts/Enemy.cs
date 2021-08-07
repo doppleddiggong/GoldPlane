@@ -8,11 +8,17 @@ public class Enemy : MonoBehaviour
 
     public float speed;
     public int health;
+    public int enemyScore;
 
     SpriteRenderer spriteRenderer;
 
     [SerializeField] GameObject bulletObjA;
     [SerializeField] GameObject bulletObjB;
+
+    [SerializeField] GameObject itemCoin;
+    [SerializeField] GameObject itemPower;
+    [SerializeField] GameObject itemBomb;
+
 
     public void Awake()
     {
@@ -25,15 +31,39 @@ public class Enemy : MonoBehaviour
         Reload();
     }
 
-    void OnHit(int dmg)
+    public void OnHit(int dmg)
     {
+        if (health <= 0)
+            return;
+
         health -= dmg;  
         spriteRenderer.sprite = sprites[1];
-
         Invoke("ReturnSprite", 0.1f);
 
         if ( health <= 0 )
         {
+            GameManager.Inst.score += enemyScore;
+
+            // Random Ratio Item Drop
+            int rand = Random.Range(0, 10);
+            if (rand < 5)
+            { }
+            else if (rand < 6)
+            { 
+                // 30p
+                Instantiate(itemCoin, transform.position, itemCoin.transform.rotation);
+            }
+            else if (rand < 8)
+            {
+                // 20p
+                Instantiate(itemPower, transform.position, itemCoin.transform.rotation);
+            }
+            else if (rand < 10)
+            {
+                // 10p
+                Instantiate(itemBomb, transform.position, itemCoin.transform.rotation);
+            }
+
             Destroy(this.gameObject);
         }
     }
@@ -87,7 +117,6 @@ public class Enemy : MonoBehaviour
             bulletL.AddForce(dirVecL.normalized * 4, ForceMode2D.Impulse);
             bulletR.AddForce(dirVecR.normalized * 4, ForceMode2D.Impulse);
         }
-
 
         curShotDelay = 0.0f;
     }

@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -12,10 +15,30 @@ public class GameManager : MonoBehaviour
 
     public float maxSpawnDelay;
     public float curSpawnDelay;
+
     public Player player;
+    public GameObject bombEffect;
+
+    public int score;
+    int playerLife = 3;
+
+    public Text scoreText;
+    public Image[] lifeImage;
+    public Image[] bombImage;
+
+    public GameObject gameOverSet;
+
+
+    private void Start()
+    {
+        UpdateLifeIcon();
+        UpdateBombIcon();
+    }
 
     private void Update()
     {
+        scoreText.text = score.ToString("#,##0");
+
         curSpawnDelay += Time.deltaTime;
 
         if (curSpawnDelay > maxSpawnDelay)
@@ -52,16 +75,116 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void OnClick_Retry()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+
     public void PlayerHit()
     {
-        player.gameObject.SetActive(true);
+        player.gameObject.SetActive(false);
+        playerLife -= 1;
+        UpdateLifeIcon();
 
-        Invoke(nameof(RespawnPlayerExe), 2.0f);
+        if (playerLife <= 0)
+        {
+            GameOver();
+        }
+        else
+        {
+            Invoke(nameof(RespawnPlayerExe), 2.0f);
+        }
     }
     
     void RespawnPlayerExe()
     {
         player.transform.position = Vector3.down * 3.5f;
         player.gameObject.SetActive(true);
+    }
+
+    void UpdateLifeIcon()
+    {
+        for( int i = 0; i < lifeImage.Length; i++ )
+        {
+            lifeImage[i].color = Color.gray;
+        }
+
+        for (int i = 0; i < playerLife; i++)
+        {
+            lifeImage[i].color = Color.white;
+        }
+    }
+
+    void GameOver()
+    {
+        gameOverSet.SetActive(true);
+    }
+
+    uint curBombCnt = 1;
+    uint MAX_BOMB = 3;
+    bool IsBombTime = false;
+
+    public void AddBomb(uint addCnt)
+    {
+        if ( curBombCnt != MAX_BOMB)
+        {
+            GameManager.Inst.curBombCnt += addCnt;
+            UpdateBombIcon();
+        }
+        else
+        {
+            GameManager.Inst.score += 500;
+        }
+    }
+
+    public void ExecuteBomb()
+    {
+        if (IsBombTime)
+            return;
+
+        if (curBombCnt <= 0)
+            return;
+
+        curBombCnt--;
+        UpdateBombIcon();
+
+        IsBombTime = true;
+        bombEffect.SetActive(true);
+
+        var objs = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (var item in objs)
+        {
+            item.GetComponent<Enemy>().OnHit(1000);
+        }
+
+        objs = GameObject.FindGameObjectsWithTag("EnemyBullet");
+        foreach (var item in objs)
+        {
+            Destroy(item);
+        }
+
+        Invoke(nameof(OffBombEffect), 3.0f);
+    }
+
+    void OffBombEffect()
+    {
+        IsBombTime = false;
+        bombEffect.SetActive(false);
+    }
+
+
+
+    void UpdateBombIcon()
+    {
+        for (int i = 0; i < bombImage.Length; i++)
+        {
+            bombImage[i].color = Color.gray;
+        }
+
+        for (int i = 0; i < curBombCnt; i++)
+        {
+            bombImage[i].color = Color.white;
+        }
     }
 }

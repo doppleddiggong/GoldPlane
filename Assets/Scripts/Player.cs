@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
         Move();
 
         Fire();
+        Bomb();
         Reload();
     }
 
@@ -40,6 +41,32 @@ public class Player : MonoBehaviour
                 case "Left":    isTouchLeft = true;     break;
             }
         }
+        else if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("EnemyBullet"))
+        {
+            GameManager.Inst.PlayerHit();
+            Destroy(collision.gameObject);
+        }
+        else if(collision.gameObject.CompareTag("Item"))
+        {
+            var item = collision.gameObject.GetComponent<Item>();
+            switch( item.itemType )
+            {
+                case Item.ItemType.Coin:
+                    GameManager.Inst.score += 1000;
+                    break;
+                case Item.ItemType.Power:
+                    if (power != MAX_POWER)
+                        power++;
+                    else
+                        GameManager.Inst.score += 500;
+                    break;
+                case Item.ItemType.Bomb:
+                    GameManager.Inst.AddBomb(1);
+                    break;
+            }
+
+            Destroy(collision.gameObject);
+        }
     }
 
     void OnTriggerExit2D(Collider2D collision)
@@ -54,11 +81,10 @@ public class Player : MonoBehaviour
                 case "Left": isTouchLeft = false; break;
             }
         }
-        else if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("EnemyBullet"))
-        {
-            GameManager.Inst.PlayerHit();
-        }
+
     }
+
+    #region Move-Fire
 
     void Move()
     {
@@ -90,9 +116,12 @@ public class Player : MonoBehaviour
     [SerializeField] float curShotDelay = 0.0f;
 
     [SerializeField] public uint power;
+    uint MAX_POWER = 3;
+
     [SerializeField] public float speed = 1.0f;
 
     [SerializeField] bool autoFire = false;
+
 
     void Fire()
     {
@@ -142,8 +171,18 @@ public class Player : MonoBehaviour
         curShotDelay = 0.0f;
     }
 
+    void Bomb()
+    {
+        if( Input.GetButtonDown("Fire2") == false )
+            return;
+
+        GameManager.Inst.ExecuteBomb();
+    }
+
+
     void Reload()
     {
         curShotDelay += Time.deltaTime;
     }
+    #endregion
 }
