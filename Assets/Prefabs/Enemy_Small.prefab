@@ -137,14 +137,9 @@ MonoBehaviour:
   sprites:
   - {fileID: 8414478535512612329, guid: 138040323294fd440a3a823e5d70ad01, type: 3}
   - {fileID: 4326287474489854147, guid: 138040323294fd440a3a823e5d70ad01, type: 3}
-  speed: 5
-  health: 1
+  speed: 10
+  MaxHealth: 1
   enemyScore: 50
-  bulletObjA: {fileID: 7570146172267316826, guid: 8bbaee6f322dba44eb75dafdc60c0c22, type: 3}
-  bulletObjB: {fileID: 4591247710470653839, guid: f63cfdd55d738684d94f8894b55febd6, type: 3}
-  itemCoin: {fileID: 6047480187858481887, guid: 7da807e0fe8ec6a42ba3b5b47fc93d20, type: 3}
-  itemPower: {fileID: 641965041542366174, guid: 20f8d6bbb9e228846959408699f442c7, type: 3}
-  itemBomb: {fileID: 8631642375004373866, guid: f5b6d7d99ffea6b4284971e4949ab8a3, type: 3}
   maxShotDelay: 0.5
   curShotDelay: 0
   enemyType: 0

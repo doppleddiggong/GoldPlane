@@ -7,22 +7,20 @@ public class Enemy : MonoBehaviour
     public Sprite[] sprites;
 
     public float speed;
-    public int health;
+    public int MaxHealth;
+    private int health;
     public int enemyScore;
 
     SpriteRenderer spriteRenderer;
 
-    [SerializeField] GameObject bulletObjA;
-    [SerializeField] GameObject bulletObjB;
-
-    [SerializeField] GameObject itemCoin;
-    [SerializeField] GameObject itemPower;
-    [SerializeField] GameObject itemBomb;
-
-
-    public void Awake()
+    void Awake()
     {
         spriteRenderer = this.gameObject.GetComponent<SpriteRenderer>();
+    }
+
+    void OnEnable()
+    {
+        health = MaxHealth;
     }
 
     void Update()
@@ -49,22 +47,25 @@ public class Enemy : MonoBehaviour
             if (rand < 5)
             { }
             else if (rand < 6)
-            { 
+            {
                 // 30p
-                Instantiate(itemCoin, transform.position, itemCoin.transform.rotation);
+                var obj = ObjectManager.Inst.MakeObj(PoolType.itemCoin);
+                obj.transform.position = transform.position;
             }
             else if (rand < 8)
             {
                 // 20p
-                Instantiate(itemPower, transform.position, itemCoin.transform.rotation);
+                var obj = ObjectManager.Inst.MakeObj(PoolType.itemPower);
+                obj.transform.position = transform.position;
             }
             else if (rand < 10)
             {
                 // 10p
-                Instantiate(itemBomb, transform.position, itemCoin.transform.rotation);
+                var obj = ObjectManager.Inst.MakeObj(PoolType.itemBomb);
+                obj.transform.position = transform.position;
             }
 
-            Destroy(this.gameObject);
+            this.gameObject.SetActive(false);
         }
     }
 
@@ -77,15 +78,14 @@ public class Enemy : MonoBehaviour
     {
         if( collision.gameObject.CompareTag("BorderBullet"))
         {
-            Destroy(this.gameObject);
+            this.gameObject.SetActive(false);
         }
         else if(collision.gameObject.CompareTag("PlayerBullet"))
         {
             var bullet = collision.gameObject.GetComponent<Bullet>();
             this.OnHit(bullet.dmg);
 
-
-            Destroy(collision.gameObject);
+            collision.gameObject.SetActive(false);
         }
     }
 
@@ -102,14 +102,22 @@ public class Enemy : MonoBehaviour
 
         if (enemyType == EnemyType.S)
         {
-            var bullet = Instantiate(bulletObjA, transform.position, transform.rotation).GetComponent<Rigidbody2D>();
+            var bullet = ObjectManager.Inst.MakeObj(PoolType.bulletEnemyA).GetComponent<Rigidbody2D>();
+            bullet.transform.position = transform.position;
+            bullet.transform.rotation = transform.rotation;
+
             Vector3 dirVec = GameManager.Inst.player.transform.position - transform.position;
             bullet.AddForce(dirVec.normalized * 3, ForceMode2D.Impulse);
         }
         if (enemyType == EnemyType.L)
         {
-            var bulletL = Instantiate(bulletObjB, transform.position + Vector3.left * 0.3f, transform.rotation).GetComponent<Rigidbody2D>();
-            var bulletR = Instantiate(bulletObjB, transform.position + Vector3.right * 0.3f, transform.rotation).GetComponent<Rigidbody2D>();
+            var bulletL = ObjectManager.Inst.MakeObj(PoolType.bulletEnemyB).GetComponent<Rigidbody2D>();
+            bulletL.transform.position = transform.position + Vector3.left * 0.3f;
+            bulletL.transform.rotation = transform.rotation;
+
+            var bulletR = ObjectManager.Inst.MakeObj(PoolType.bulletEnemyB).GetComponent<Rigidbody2D>();
+            bulletR.transform.position = transform.position + Vector3.right * 0.3f;
+            bulletR.transform.rotation = transform.rotation;
 
             Vector3 dirVecL = GameManager.Inst.player.transform.position - (transform.position + Vector3.left * 0.3f);
             Vector3 dirVecR = GameManager.Inst.player.transform.position - (transform.position + Vector3.right * 0.3f);

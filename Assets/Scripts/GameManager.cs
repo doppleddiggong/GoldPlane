@@ -10,26 +10,30 @@ public class GameManager : MonoBehaviour
     public static GameManager Inst { get; private set; }
     void Awake() => Inst = this;
 
-    public GameObject[] enemyObjs;
+    //---------------------------------------------------
     public Transform[] spawnPoints;
 
     public float maxSpawnDelay;
     public float curSpawnDelay;
-
+    //---------------------------------------------------
     public Player player;
-    public GameObject bombEffect;
-
-    public int score;
-    int playerLife = 3;
-
+    //---------------------------------------------------
     public Text scoreText;
     public Image[] lifeImage;
     public Image[] bombImage;
 
     public GameObject gameOverSet;
+    public GameObject bombEffect;
+    //---------------------------------------------------
 
 
-    private void Start()
+    public int score;
+    int playerLife = 3;
+
+
+
+
+    void Start()
     {
         UpdateLifeIcon();
         UpdateBombIcon();
@@ -52,10 +56,21 @@ public class GameManager : MonoBehaviour
 
     void SpawnEnemy()
     {
-        int randEnemy = Random.Range(0, enemyObjs.Length);
+        int randEnemy = Random.Range(0, 3);
         int randPoint = Random.Range(0, spawnPoints.Length);
 
-        var enemyObj = Instantiate(enemyObjs[randEnemy], spawnPoints[randPoint].position, spawnPoints[randPoint].rotation);
+        PoolType poolType;
+        if ( randEnemy == 0 )
+            poolType = PoolType.enemyL;
+        else if(randEnemy == 1)
+            poolType = PoolType.enemyM;
+        else
+            poolType = PoolType.enemyS;
+
+        var enemyObj = ObjectManager.Inst.MakeObj(poolType);
+        enemyObj.transform.position = spawnPoints[randPoint].position;
+        enemyObj.transform.rotation = spawnPoints[randPoint].rotation;
+
         var rigid = enemyObj.GetComponent<Rigidbody2D>();
         var enemy = enemyObj.GetComponent<Enemy>();
 
@@ -129,12 +144,12 @@ public class GameManager : MonoBehaviour
     {
         if ( curBombCnt != MAX_BOMB)
         {
-            GameManager.Inst.curBombCnt += addCnt;
+            curBombCnt += addCnt;
             UpdateBombIcon();
         }
         else
         {
-            GameManager.Inst.score += 500;
+            score += 500;
         }
     }
 
@@ -152,16 +167,24 @@ public class GameManager : MonoBehaviour
         IsBombTime = true;
         bombEffect.SetActive(true);
 
-        var objs = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (var item in objs)
-        {
-            item.GetComponent<Enemy>().OnHit(1000);
-        }
+        var objList = new List<GameObject>();
 
-        objs = GameObject.FindGameObjectsWithTag("EnemyBullet");
-        foreach (var item in objs)
+        objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.enemyL));
+        objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.enemyM));
+        objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.enemyS));
+        foreach (var item in objList)
         {
-            Destroy(item);
+            if( item.activeSelf )
+                item.GetComponent<Enemy>().OnHit(1000);
+        }
+        objList.Clear();
+
+        objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.bulletEnemyA));
+        objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.bulletEnemyB));
+        foreach (var item in objList)
+        {
+            if (item.activeSelf)
+                item.gameObject.SetActive(false);
         }
 
         Invoke(nameof(OffBombEffect), 3.0f);

@@ -1214,8 +1214,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 773957486}
-  bulletObjA: {fileID: 3972241081656101513, guid: 51635344e6a447f418c209f487fd73f4, type: 3}
-  bulletObjB: {fileID: 6603623644379204003, guid: 771e9fd6f0921fa4d999064823c2fceb, type: 3}
   bulletSpeed: 10
   maxShotDelay: 0.1
   curShotDelay: 0
@@ -1946,6 +1944,59 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 7, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &1124267289
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1124267291}
+  - component: {fileID: 1124267290}
+  m_Layer: 0
+  m_Name: ObjectManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1124267290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1124267289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8edab200e19cffd4e9ba6f45c6365f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  base_enemyL: {fileID: 1234001317415416098, guid: e419be2a57e565440951c5547ddb6e2c, type: 3}
+  base_enemyM: {fileID: 4848985213496081305, guid: c5eaa7e6cefcce04c934ecdfd911d86c, type: 3}
+  base_enemyS: {fileID: 8278981264010724858, guid: a21b2dd472f53844f99e064be5740a17, type: 3}
+  base_itemCoin: {fileID: 6047480187858481887, guid: 7da807e0fe8ec6a42ba3b5b47fc93d20, type: 3}
+  base_itemPower: {fileID: 641965041542366174, guid: 20f8d6bbb9e228846959408699f442c7, type: 3}
+  base_itemBomb: {fileID: 8631642375004373866, guid: f5b6d7d99ffea6b4284971e4949ab8a3, type: 3}
+  base_bulletPlayerA: {fileID: 3972241081656101513, guid: 51635344e6a447f418c209f487fd73f4, type: 3}
+  base_bulletPlayerB: {fileID: 6603623644379204003, guid: 771e9fd6f0921fa4d999064823c2fceb, type: 3}
+  base_bulletEnemyA: {fileID: 7570146172267316826, guid: 8bbaee6f322dba44eb75dafdc60c0c22, type: 3}
+  base_bulletEnemyB: {fileID: 4591247710470653839, guid: f63cfdd55d738684d94f8894b55febd6, type: 3}
+--- !u!4 &1124267291
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1124267289}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -50.8, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1145771848
 GameObject:
   m_ObjectHideFlags: 0
@@ -3085,7 +3136,7 @@ Transform:
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1707454220
 GameObject:
@@ -3151,7 +3202,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1744640019
 GameObject:
@@ -3263,7 +3314,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1759116019
 GameObject:
@@ -3773,7 +3824,7 @@ RectTransform:
   - {fileID: 137076558}
   - {fileID: 382790387}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3892,7 +3943,7 @@ RectTransform:
   - {fileID: 1826274885}
   - {fileID: 1855043003}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3962,10 +4013,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31998cf3d6cfdf7439db0cdd28b5b1a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyObjs:
-  - {fileID: 1234001317415416098, guid: e419be2a57e565440951c5547ddb6e2c, type: 3}
-  - {fileID: 4848985213496081305, guid: c5eaa7e6cefcce04c934ecdfd911d86c, type: 3}
-  - {fileID: 8278981264010724858, guid: a21b2dd472f53844f99e064be5740a17, type: 3}
   spawnPoints:
   - {fileID: 1148112553}
   - {fileID: 305375616}
@@ -3979,8 +4026,6 @@ MonoBehaviour:
   maxSpawnDelay: 0
   curSpawnDelay: 0
   player: {fileID: 773957483}
-  bombEffect: {fileID: 1702497463}
-  score: 0
   scoreText: {fileID: 1035546438}
   lifeImage:
   - {fileID: 1872882947}
@@ -3991,6 +4036,8 @@ MonoBehaviour:
   - {fileID: 1759116021}
   - {fileID: 1700517429}
   gameOverSet: {fileID: 382790386}
+  bombEffect: {fileID: 1702497463}
+  score: 0
 --- !u!4 &1959907713
 Transform:
   m_ObjectHideFlags: 0

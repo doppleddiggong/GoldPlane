@@ -11,14 +11,10 @@ public class Player : MonoBehaviour
 
     [SerializeField] Animator anim;
 
-    [SerializeField] GameObject bulletObjA;
-    [SerializeField] GameObject bulletObjB;
-
     private void Awake()
     {
         anim = GetComponent<Animator>();
     }
-
 
     void Update()
     {
@@ -44,7 +40,7 @@ public class Player : MonoBehaviour
         else if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("EnemyBullet"))
         {
             GameManager.Inst.PlayerHit();
-            Destroy(collision.gameObject);
+            collision.gameObject.SetActive(false);
         }
         else if(collision.gameObject.CompareTag("Item"))
         {
@@ -65,7 +61,7 @@ public class Player : MonoBehaviour
                     break;
             }
 
-            Destroy(collision.gameObject);
+            item.gameObject.SetActive(false);
         }
     }
 
@@ -136,7 +132,10 @@ public class Player : MonoBehaviour
         {
             case 1:
                 {
-                    var bullet = Instantiate(bulletObjA, transform.position, transform.rotation).GetComponent<Rigidbody2D>();
+                    var bullet = ObjectManager.Inst.MakeObj(PoolType.bulletPlayerA).GetComponent<Rigidbody2D>();
+                    bullet.transform.position = transform.position;
+                    bullet.transform.rotation = transform.rotation;
+
                     bullet.AddForce(Vector2.up * bulletSpeed, ForceMode2D.Impulse);
                 }
 
@@ -145,19 +144,32 @@ public class Player : MonoBehaviour
 
             case 2:
                 {
-                    var bulletR = Instantiate(bulletObjA, transform.position + Vector3.right * 0.1f, transform.rotation).GetComponent<Rigidbody2D>();
-                    var bulletL = Instantiate(bulletObjA, transform.position + Vector3.left * 0.1f, transform.rotation).GetComponent<Rigidbody2D>();
+                    var bulletL = ObjectManager.Inst.MakeObj(PoolType.bulletPlayerA).GetComponent<Rigidbody2D>();
+                    bulletL.transform.position = transform.position + Vector3.left * 0.1f;
+                    bulletL.transform.rotation = transform.rotation;
 
-                    bulletR.AddForce(Vector2.up * bulletSpeed, ForceMode2D.Impulse);
+                    var bulletR = ObjectManager.Inst.MakeObj(PoolType.bulletPlayerA).GetComponent<Rigidbody2D>();
+                    bulletR.transform.position = transform.position + Vector3.right * 0.1f;
+                    bulletR.transform.rotation = transform.rotation;
+
                     bulletL.AddForce(Vector2.up * bulletSpeed, ForceMode2D.Impulse);
+                    bulletR.AddForce(Vector2.up * bulletSpeed, ForceMode2D.Impulse);
                 }
                 break;
 
             case 3:
                 {
-                    var bulletR = Instantiate(bulletObjA, transform.position + Vector3.right * 0.3f, transform.rotation).GetComponent<Rigidbody2D>();
-                    var bulletL = Instantiate(bulletObjA, transform.position + Vector3.left * 0.3f, transform.rotation).GetComponent<Rigidbody2D>();
-                    var bulletC = Instantiate(bulletObjB, transform.position, transform.rotation).GetComponent<Rigidbody2D>();
+                    var bulletL = ObjectManager.Inst.MakeObj(PoolType.bulletPlayerA).GetComponent<Rigidbody2D>();
+                    bulletL.transform.position = transform.position + Vector3.left * 0.3f;
+                    bulletL.transform.rotation = transform.rotation;
+
+                    var bulletC = ObjectManager.Inst.MakeObj(PoolType.bulletPlayerB).GetComponent<Rigidbody2D>(); 
+                    bulletC.transform.position = transform.position;
+                    bulletC.transform.rotation = transform.rotation;
+
+                    var bulletR = ObjectManager.Inst.MakeObj(PoolType.bulletPlayerA).GetComponent<Rigidbody2D>();
+                    bulletR.transform.position = transform.position + Vector3.right * 0.3f;
+                    bulletR.transform.rotation = transform.rotation;
 
                     bulletR.AddForce(Vector2.up * bulletSpeed, ForceMode2D.Impulse);
                     bulletL.AddForce(Vector2.up * bulletSpeed, ForceMode2D.Impulse);
