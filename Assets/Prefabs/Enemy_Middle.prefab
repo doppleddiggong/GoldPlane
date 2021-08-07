@@ -153,9 +153,9 @@ MonoBehaviour:
   sprites:
   - {fileID: -1147401495359466748, guid: 138040323294fd440a3a823e5d70ad01, type: 3}
   - {fileID: -7844560889915226194, guid: 138040323294fd440a3a823e5d70ad01, type: 3}
-  speed: 5
+  speed: 3
   MaxHealth: 15
   enemyScore: 100
-  maxShotDelay: 1
+  maxShotDelay: 1.5
   curShotDelay: 0
   enemyType: 1
