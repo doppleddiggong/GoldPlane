@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float speed = 1.0f;
-    
     bool isTouchTop;
     bool isTouchBottom;
     bool isTouchRight;
@@ -46,7 +44,7 @@ public class Player : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Border")
+        if (collision.gameObject.CompareTag("Border"))
         {
             switch (collision.gameObject.name)
             {
@@ -55,6 +53,10 @@ public class Player : MonoBehaviour
                 case "Right": isTouchRight = false; break;
                 case "Left": isTouchLeft = false; break;
             }
+        }
+        else if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("EnemyBullet"))
+        {
+            GameManager.Inst.PlayerHit();
         }
     }
 
@@ -83,12 +85,19 @@ public class Player : MonoBehaviour
         }
     }
 
-    float bulletSpeed = 10.0f;
-    float maxShotDelay = 0.2f;
-    float curShotDelay;
+    [SerializeField] float bulletSpeed = 10.0f;
+    [SerializeField] float maxShotDelay = 0.2f;
+    [SerializeField] float curShotDelay = 0.0f;
+
+    [SerializeField] public uint power;
+    [SerializeField] public float speed = 1.0f;
+
+    [SerializeField] bool autoFire = false;
+
     void Fire()
     {
-        if( Input.GetButtonDown("Fire1") == false )
+        if ( autoFire == false &&
+            Input.GetButtonDown("Fire1") == false )
             return;
 
         if (curShotDelay < maxShotDelay)
@@ -137,8 +146,4 @@ public class Player : MonoBehaviour
     {
         curShotDelay += Time.deltaTime;
     }
-
-
-
-    public uint power;
 }
