@@ -1,10 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Follower : MonoBehaviour
 {
-
     void Awake()
     {
         parentPos.Clear();
@@ -12,14 +11,36 @@ public class Follower : MonoBehaviour
 
     void Update()
     {
-        Watch();
-        Follow();
+        if (bAroundRotate)
+        {
+            TargetRotateAround();
+        }
+        else
+        {
+            Watch();
+            Follow();
+        }
 
         Fire();
         Reload();
     }
 
     #region Move-Fire
+    public bool bAroundRotate = false;
+    public Transform aroundTarget;
+
+    public float radius = 1.0f;
+    public int moveDir = 1;
+    public float moveSpeed = 1.0f;
+    void TargetRotateAround()
+    {
+        this.transform.position = radius * Vector3.Normalize(this.transform.position - aroundTarget.position) + aroundTarget.position;
+        transform.RotateAround(aroundTarget.position, Vector3.forward, moveDir * Time.deltaTime * moveSpeed);
+
+        // #. Look Forward
+        transform.rotation = Quaternion.identity;
+    }
+
 
     Vector3 followPos;
     public int followDelay;

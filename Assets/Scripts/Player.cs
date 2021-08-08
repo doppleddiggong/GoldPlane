@@ -60,6 +60,7 @@ public class Player : MonoBehaviour
         followers.Clear();
     }
 
+    public bool immortal = false;
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -75,7 +76,7 @@ public class Player : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("EnemyBullet"))
         {
-            if (isRespawnTime == false)
+            if (isRespawnTime == false && immortal == false )
             {
                 GameManager.Inst.PlayerHit();
             }
