@@ -64,6 +64,8 @@ public class GameManager : MonoBehaviour
             poolType = PoolType.enemyM;
         else if (spawnList[spawnIndex].type == "S")
             poolType = PoolType.enemyS;
+        else if (spawnList[spawnIndex].type == "BOSS")
+            poolType = PoolType.enemyBoss;
 
         int enemyPoint = spawnList[spawnIndex].point;
 
@@ -130,7 +132,7 @@ public class GameManager : MonoBehaviour
         player.transform.position = Vector3.down * 3.5f;
         player.gameObject.SetActive(true);
         player.FollowerActivate(true);
-        }
+    }
 
     void UpdateLifeIcon()
     {
@@ -211,7 +213,6 @@ public class GameManager : MonoBehaviour
     }
 
 
-
     void UpdateBombIcon()
     {
         for (int i = 0; i < bombImage.Length; i++)
@@ -239,7 +240,7 @@ public class GameManager : MonoBehaviour
         spawnEnd = false;
 
         // #2.리스폰 파일 읽기
-        var textFile = Resources.Load("Stage0") as TextAsset;
+        var textFile = Resources.Load("Stage1") as TextAsset;
         var reader = new StringReader(textFile.text);
         // #. 첫 줄은 넘긴다
         reader.ReadLine();
@@ -267,5 +268,4 @@ public class GameManager : MonoBehaviour
         // #. 첫번쨰 스폰 딜레이
         nextSpawnDelay = spawnList[0].delay;
     }
-
 }

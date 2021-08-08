@@ -1976,6 +1976,7 @@ MonoBehaviour:
   base_enemyL: {fileID: 1234001317415416098, guid: e419be2a57e565440951c5547ddb6e2c, type: 3}
   base_enemyM: {fileID: 4848985213496081305, guid: c5eaa7e6cefcce04c934ecdfd911d86c, type: 3}
   base_enemyS: {fileID: 8278981264010724858, guid: a21b2dd472f53844f99e064be5740a17, type: 3}
+  base_enemyBoss: {fileID: 27436722058035105, guid: e79bff2b3db3332429312af2873e3691, type: 3}
   base_follower: {fileID: 4558412077262552573, guid: 31274bf73bdfdab4eadbb97ea5506e15, type: 3}
   base_itemCoin: {fileID: 6047480187858481887, guid: 7da807e0fe8ec6a42ba3b5b47fc93d20, type: 3}
   base_itemPower: {fileID: 641965041542366174, guid: 20f8d6bbb9e228846959408699f442c7, type: 3}
@@ -1985,6 +1986,8 @@ MonoBehaviour:
   base_bulletEnemyA: {fileID: 7570146172267316826, guid: 8bbaee6f322dba44eb75dafdc60c0c22, type: 3}
   base_bulletEnemyB: {fileID: 4591247710470653839, guid: f63cfdd55d738684d94f8894b55febd6, type: 3}
   base_bulletFollowerA: {fileID: 7020668317147334063, guid: 6ce5d0e250fee304399b36d47efbed69, type: 3}
+  base_bulletEnemyBossA: {fileID: 8902687485919829425, guid: ae578c8e92707b148a53dc8b2400cdb9, type: 3}
+  base_bulletEnemyBossB: {fileID: 3784261561848794777, guid: 78489db2971374742b813593cdf3c53e, type: 3}
 --- !u!4 &1124267291
 Transform:
   m_ObjectHideFlags: 0

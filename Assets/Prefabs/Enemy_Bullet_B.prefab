@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1621436305390918795}
   - component: {fileID: 3057102884211157118}
   m_Layer: 0
-  m_Name: Enemy_Bullet_D
+  m_Name: Enemy_Bullet_B
   m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -119,6 +119,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dmg: 3
+  isRotate: 1
 --- !u!61 &3057102884211157118
 BoxCollider2D:
   m_ObjectHideFlags: 0
