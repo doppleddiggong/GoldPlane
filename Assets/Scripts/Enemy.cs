@@ -30,6 +30,10 @@ public class Enemy : MonoBehaviour
         {
             Invoke(nameof(Stop), 2.0f);
         }
+        else
+        {
+            spriteRenderer.sprite = sprites[0];
+        }
     }
 
     void Update()
@@ -88,6 +92,26 @@ public class Enemy : MonoBehaviour
             }
 
             this.gameObject.SetActive(false);
+
+            PoolType type = PoolType.MAX;
+            if (enemyType == EnemyType.S)
+            {
+                type = PoolType.enemyS;
+            }
+            else if (enemyType == EnemyType.M)
+            {
+                type = PoolType.enemyM;
+            }
+            else if(enemyType == EnemyType.L)
+            {
+                type = PoolType.enemyL;
+            }
+            else if(enemyType == EnemyType.BOSS)
+            {
+                type = PoolType.enemyBoss;
+            }
+
+            GameManager.Inst.CallExplosion(transform.position, type);
             CancelInvoke();
         }
     }

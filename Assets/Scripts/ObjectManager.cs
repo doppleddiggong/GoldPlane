@@ -23,6 +23,9 @@ public enum PoolType
     bulletEnemyBossA,
     bulletEnemyBossB,
 
+    explosion,
+
+
     MAX
 };
 
@@ -48,6 +51,8 @@ public class ObjectManager : MonoBehaviour
     [SerializeField] GameObject base_bulletEnemyBossA;
     [SerializeField] GameObject base_bulletEnemyBossB;
 
+    [SerializeField] GameObject base_explosion;
+
     List<GameObject> pool_enemyL = new List<GameObject>();
     List<GameObject> pool_enemyM = new List<GameObject>();
     List<GameObject> pool_enemyS = new List<GameObject>();
@@ -65,6 +70,9 @@ public class ObjectManager : MonoBehaviour
     List<GameObject> pool_bulletFollowerA = new List<GameObject>();
     List<GameObject> pool_bulletEnemyBossA = new List<GameObject>();
     List<GameObject> pool_bulletEnemyBossB = new List<GameObject>();
+
+    List<GameObject> pool_explosion = new List<GameObject>();
+
 
     void Awake()
     {
@@ -87,6 +95,9 @@ public class ObjectManager : MonoBehaviour
             pool_itemCoin.Add(Instantiate(base_itemCoin, this.gameObject.transform));
             pool_itemPower.Add(Instantiate(base_itemPower, this.gameObject.transform));
             pool_itemBomb.Add(Instantiate(base_itemBomb, this.gameObject.transform));
+
+            pool_explosion.Add(Instantiate(base_explosion, this.gameObject.transform));
+
         }
 
         ObjectAllHide(pool_enemyL);
@@ -97,6 +108,8 @@ public class ObjectManager : MonoBehaviour
         ObjectAllHide(pool_itemCoin);
         ObjectAllHide(pool_itemPower);
         ObjectAllHide(pool_itemBomb);
+
+        ObjectAllHide(pool_explosion);
 
         for (int i = 0; i < 10; i++)
         {
@@ -165,9 +178,10 @@ public class ObjectManager : MonoBehaviour
             case PoolType.bulletEnemyA: return pool_bulletEnemyA;
             case PoolType.bulletEnemyB: return pool_bulletEnemyB;
             case PoolType.bulletFollowerA: return pool_bulletFollowerA;
-
             case PoolType.bulletEnemyBossA: return pool_bulletEnemyBossA;
             case PoolType.bulletEnemyBossB: return pool_bulletEnemyBossB;
+
+            case PoolType.explosion: return pool_explosion;
         }
 
         return null;
@@ -194,6 +208,8 @@ public class ObjectManager : MonoBehaviour
             case PoolType.bulletFollowerA: return base_bulletFollowerA;
             case PoolType.bulletEnemyBossA: return base_bulletEnemyBossA;
             case PoolType.bulletEnemyBossB: return base_bulletEnemyBossB;
+
+            case PoolType.explosion: return base_explosion;
         }
 
         return null;

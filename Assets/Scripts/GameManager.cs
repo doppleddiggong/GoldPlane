@@ -35,15 +35,19 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         Inst = this;
-
-        ReadSpawnFile();
-
-        UpdateLifeIcon();
-        UpdateBombIcon();
     }
+
+    private void Start()
+    {
+        StageStart();
+    }
+
+    float nextCheckTime = 300.0f;
 
     void Update()
     {
+        scoreText.text = score.ToString("#,##0");
+
         curSpawnDelay += Time.deltaTime;
 
         if (curSpawnDelay > nextSpawnDelay && spawnEnd == false )
@@ -52,7 +56,28 @@ public class GameManager : MonoBehaviour
             curSpawnDelay = 0.0f;
         }
 
-        scoreText.text = score.ToString("#,##0");
+        if( spawnEnd )
+        {
+            if ( Time.realtimeSinceStartup > nextCheckTime)
+            {
+                // 스테이지 종료
+                var objList = new List<GameObject>();
+                objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.enemyL));
+                objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.enemyM));
+                objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.enemyS));
+                objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.enemyBoss));
+                foreach (var item in objList)
+                {
+                    if (item.activeSelf)
+                    {
+                        nextCheckTime = Time.realtimeSinceStartup + 1.0f;
+                        return;
+                    }
+                }
+
+                StageEnd();
+            }
+        }
     }
 
     void SpawnEnemy()
@@ -96,6 +121,7 @@ public class GameManager : MonoBehaviour
         if (spawnIndex == spawnList.Count)
         {
             spawnEnd = true;
+            nextCheckTime = Time.realtimeSinceStartup + 1.0f;
             return;
         }
 
@@ -108,14 +134,14 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-
     public void PlayerHit()
     {
-        player.gameObject.SetActive(false);
+        player.Unbeatable();
         player.FollowerActivate(false);
 
         playerLife -= 1;
         UpdateLifeIcon();
+        CallExplosion(player.transform.position, PoolType.explosion);
 
         if (playerLife <= 0)
         {
@@ -129,8 +155,7 @@ public class GameManager : MonoBehaviour
     
     void RespawnPlayerExe()
     {
-        player.transform.position = Vector3.down * 3.5f;
-        player.gameObject.SetActive(true);
+        player.Unbeatable();
         player.FollowerActivate(true);
     }
 
@@ -149,6 +174,8 @@ public class GameManager : MonoBehaviour
 
     void GameOver()
     {
+        player.EndGame();
+
         gameOverSet.SetActive(true);
     }
 
@@ -188,6 +215,7 @@ public class GameManager : MonoBehaviour
         objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.enemyL));
         objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.enemyM));
         objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.enemyS));
+        objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.enemyBoss));
         foreach (var item in objList)
         {
             if( item.activeSelf )
@@ -197,6 +225,8 @@ public class GameManager : MonoBehaviour
 
         objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.bulletEnemyA));
         objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.bulletEnemyB));
+        objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.bulletEnemyBossA));
+        objList.AddRange(ObjectManager.Inst.GetPoolList(PoolType.bulletEnemyBossB));
         foreach (var item in objList)
         {
             if (item.activeSelf)
@@ -240,7 +270,7 @@ public class GameManager : MonoBehaviour
         spawnEnd = false;
 
         // #2.리스폰 파일 읽기
-        var textFile = Resources.Load("Stage1") as TextAsset;
+        var textFile = Resources.Load($"Stage{stage}") as TextAsset;
         var reader = new StringReader(textFile.text);
         // #. 첫 줄은 넘긴다
         reader.ReadLine();
@@ -268,4 +298,72 @@ public class GameManager : MonoBehaviour
         // #. 첫번쨰 스폰 딜레이
         nextSpawnDelay = spawnList[0].delay;
     }
+
+    public void CallExplosion(Vector3 pos, PoolType type)
+    {
+        var tmpObj = ObjectManager.Inst.MakeObj(PoolType.explosion).GetComponent<Explosion>();
+        tmpObj.transform.position = pos;
+        tmpObj.StartExplosion(type);
+    }
+
+
+
+    public int stage = 0;
+
+
+
+    public void StageStart()
+    {
+        // #. Stage UI Load
+        startAnim.SetTrigger("OnText");
+        startAnim.GetComponent<Text>().text = $"Stage {stage}\nStart";
+        // #. Enemy Spawn File Read;
+        ReadSpawnFile();
+
+        // #. Fade In
+        fadeAnim.SetTrigger("FadeIn");
+
+        UpdateLifeIcon();
+        UpdateBombIcon();
+
+        score = 0;
+        playerLife = MAX_PLAYER_LIFE;
+        curBombCnt = 1;
+        IsBombTime = false;
+        bombEffect.SetActive(false);
+
+        player.transform.position = playerPos.position;
+    }
+
+    public void StageEnd()
+    {
+        nextCheckTime = 300.0f;
+
+        // #. Clear UI Load
+        clearAnim.SetTrigger("OnText");
+        clearAnim.GetComponent<Text>().text = $"Stage {stage}\nClear";
+
+        // #. Fade Out
+        fadeAnim.SetTrigger("FadeOut");
+
+        // #. Player Repos
+        player.transform.position = playerPos.position;
+
+        // #. Stage Increment
+        stage++;
+        if (stage > 4)
+        {
+            GameOver();
+        }
+        else
+        {
+            Invoke(nameof(StageStart), 2.0f);
+        }
+    }
+
+    public Animator startAnim;
+    public Animator clearAnim;
+    public Animator fadeAnim;
+
+    public Transform playerPos;
 }

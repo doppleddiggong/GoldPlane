@@ -10,10 +10,12 @@ public class Player : MonoBehaviour
     bool isTouchLeft;
 
     [SerializeField] Animator anim;
+    SpriteRenderer spriteRenderer;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -24,6 +26,40 @@ public class Player : MonoBehaviour
         Bomb();
         Reload();
     }
+
+
+    public bool isRespawnTime = false;
+
+    void OnEnable()
+    {
+        Unbeatable();
+        Invoke(nameof(Unbeatable), 0.5f);
+    }
+
+    public void Unbeatable()
+    {
+        isRespawnTime = !isRespawnTime;
+        if( isRespawnTime )
+        {
+            spriteRenderer.color = new Color(1, 1, 1, 0.25f);
+        }
+        else
+        {
+            spriteRenderer.color = Color.white;
+        }
+    }
+
+    public void EndGame()
+    {
+        this.gameObject.SetActive(false);
+
+        foreach (var follower in followers)
+        {
+            follower.gameObject.SetActive(false);
+        }
+        followers.Clear();
+    }
+
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -39,7 +75,11 @@ public class Player : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("EnemyBullet"))
         {
-            GameManager.Inst.PlayerHit();
+            if (isRespawnTime == false)
+            {
+                GameManager.Inst.PlayerHit();
+            }
+
             collision.gameObject.SetActive(false);
         }
         else if(collision.gameObject.CompareTag("Item"))
@@ -89,13 +129,25 @@ public class Player : MonoBehaviour
     {
         // 경계선 체크
         float h = Input.GetAxisRaw("Horizontal");
-        if ((isTouchRight && h == 1) ||
-            (isTouchLeft && h == -1))
+        float v = Input.GetAxisRaw("Vertical");
+
+        if (isControl)
+        {
+            if (joyControl[0]) { h = -1; v = 1; }
+            if (joyControl[1]) { h = 0; v = 1; }
+            if (joyControl[2]) { h = 1; v = 1; }
+            if (joyControl[3]) { h = -1; v = 0; }
+            if (joyControl[4]) { h = 0; v = 0; }
+            if (joyControl[5]) { h = 1; v = 0; }
+            if (joyControl[6]) { h = -1; v = -1; }
+            if (joyControl[7]) { h = 0; v = -1; }
+            if (joyControl[8]) { h = 1; v = -1; }
+        }
+
+        if ((isTouchRight && h == 1) || (isTouchLeft && h == -1))
             h = 0;
 
-        float v = Input.GetAxisRaw("Vertical");
-        if ((isTouchTop && v == 1) ||
-            (isTouchBottom && v == -1))
+        if ((isTouchTop && v == 1) || (isTouchBottom && v == -1))
             v = 0;
 
         // 이동 제어
@@ -124,7 +176,13 @@ public class Player : MonoBehaviour
 
     void Fire()
     {
-        if ( autoFire == false &&
+        bool fire = false;
+        if (isButtonA || autoFire )
+        {
+            fire = true;
+        }
+
+        if (fire == false &&
             Input.GetButtonDown("Fire1") == false )
             return;
 
@@ -189,7 +247,18 @@ public class Player : MonoBehaviour
 
     void Bomb()
     {
-        if( Input.GetButtonDown("Fire2") == false )
+        bool fire = false;
+        
+        if( isButtonB )
+        {
+            fire = true;
+        }
+        if (Input.GetButtonDown("Fire2"))
+        {
+            fire = true;
+        }
+
+        if (fire == false )
             return;
 
         GameManager.Inst.ExecuteBomb();
@@ -229,12 +298,59 @@ public class Player : MonoBehaviour
     {
         foreach( var follower in followers )
         {
-            follower.gameObject.SetActive(state);
+            //follower.gameObject.SetActive(state);
+
             if (state)
             {
                 follower.transform.position = this.gameObject.transform.position;
+                follower.GetComponent<SpriteRenderer>().color = Color.white;
+            }
+            else
+            {
+                follower.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.25f);
             }
         }
+    }
+    #endregion
+
+
+
+
+    #region joyPad
+    bool[] joyControl = new bool[9];
+    bool isControl;
+    public void JoyPanel(int type)
+    {
+        for( int i = 0; i < 9; i++ )
+        {
+            joyControl[i] = i == type;
+        }
+    }
+    public void joyDown()
+    {
+        isControl = true;
+    }
+    public void joyUp()
+    {
+        isControl = false;
+    }
+
+    bool isButtonA;
+    bool isButtonB;
+
+    public void ButtonADown()
+    {
+        isButtonA = true;
+    }
+
+    public void ButtonAUp()
+    {
+        isButtonA = false;
+    }
+
+    public void ButtonBDown()
+    {
+        isButtonB = true;
     }
     #endregion
 }
